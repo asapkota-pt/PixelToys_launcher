@@ -1,2 +1,13 @@
-# PixelToys_launcher
-PT DCC Launcher (Maya For now)
+# PixelToys\_launcher
+
+PT DCC Launcher
+
+
+
+
+
+Set the repo to the following location:
+
+
+D:\\PixelToys\_launcher
+

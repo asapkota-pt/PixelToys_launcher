@@ -1,0 +1,37 @@
+{
+  "Panda":
+  {
+    "maya_version":"2025",
+    "coala_version":"coala3",
+    "project_location": "V:",
+    "python": "Winpython64-3.12.6.0/WPy64-31260/python-3.12.6.amd64"
+  },
+  "Giraffe":
+  {
+    "maya_version":"2025",
+    "coala_version":"coala3",
+    "project_location": "V:",
+    "python": "Winpython64-3.12.6.0/WPy64-31260/python-3.12.6.amd64"
+  },
+  "Elephant":
+  {
+    "maya_version":"2025",
+    "coala_version":"coala3",
+    "project_location": "V:",
+    "python": "Winpython64-3.12.6.0/WPy64-31260/python-3.12.6.amd64"
+  },
+  "Zebra":
+  {
+    "maya_version":"2025",
+    "coala_version":"coala3",
+    "project_location": "V:",
+    "python": "Winpython64-3.12.6.0/WPy64-31260/python-3.12.6.amd64"
+  },
+  "Zebra2":
+  {
+    "maya_version":"2025",
+    "coala_version":"coala3",
+    "project_location": "V:",
+    "python": "Winpython64-3.12.6.0/WPy64-31260/python-3.12.6.amd64"
+  }
+}
