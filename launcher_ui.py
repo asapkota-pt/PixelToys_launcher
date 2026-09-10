@@ -1,7 +1,6 @@
 import os
 import subprocess
 import sys
-import getpass
 
 pyside6_location = os.path.abspath("./_env/_python/Lib/site-packages")
 #os.environ['QT_PLUGIN_PATH'] = os.path.join(pyside6_location, "PySide6", "plugins")
@@ -9,68 +8,37 @@ pyside6_location = os.path.abspath("./_env/_python/Lib/site-packages")
 if not pyside6_location in sys.path:
     sys.path.append(pyside6_location)
 
+import launcher_utils
+import launcher_env
+
 from PySide6 import QtCore
 from PySide6 import QtGui
 from PySide6 import QtWidgets
-import launcher_utils
-import shutil
-
 
 class launcher():
     def __init__(self, project_name, software_name, runas_dev=False):
         super().__init__()
-        self.launcher_env = "./_env"
-        if software_name=="maya":
-            maya_arguments, project_env = self.set_env(project_name, maya_env=f"{self.launcher_env}/_mayaEnv", runas_dev=runas_dev)
-            self.maya_launcher(maya_arguments, project_env)
+        self.pt_launcher_env = "./_env"
+        self.project_name = project_name
+        self.dcc_name = software_name
+        self.runas_dev = runas_dev
+        self.setup_launch()
 
+    def setup_launch(self):
+        pt_environment = launcher_env.pt_dcc_env(self.project_name, env=f"{self.pt_launcher_env}/_mayaEnv", runas_dev=self.runas_dev)
+        arguments, project_env = None, None
+        if self.dcc_name == "maya":
+            arguments, project_env = pt_environment.maya_env
 
-    def set_env(self, project_name, maya_env, runas_dev):
-        pt_projects = launcher_utils.pt_proj_info(project_name)
-        project_python = pt_projects.get_project_python()
-        project_icons = pt_projects.get_project_icon()
-        project_coala = pt_projects.get_project_coala()
-        project_location = pt_projects.get_project_location()
-        project_maya_version = pt_projects.get_project_maya()
+        if arguments == None or project_env == None:
+            raise ValueError("No environment is set for the launch")
 
-        project_env = os.environ.copy()
-        # pt_art_tools_path = f"{project_location}/Art/Tools/pt_art_tools"
-        pt_art_tools_path = "V:/Panda/Art/Tools/pt_art_tools"  # this should be changed to the upper one after we move coala out from Panda
-        #coala_path = f"{pt_art_tools_path}/{project_coala}"
-        coala_path = f"{pt_art_tools_path}/{project_coala}"
-        python_lib_path = f"{pt_art_tools_path}/WinPython/{project_python}/Lib/site-packages"
-        if python_lib_path not in sys.path:
-            sys.path.append(python_lib_path)
+        self.launch_dcc(arguments, project_env)
 
-        project_env["MAYA_SCENES"] = f"{project_location}/Art"
-        project_env["PYTHONPATH"] = f"{pt_art_tools_path};{python_lib_path};{coala_path}"
-        project_env["MAYA_MODULE_PATH"] = f"{coala_path}/plugins;"
-        project_env["MAYA_PLUG_IN_PATH"] = f"{coala_path}/plugins;"
+    def launch_dcc(self, arguments, project_env):
+        #Launching DCC
+        subprocess.Popen(arguments, env=project_env)# Doesnt wait after running maya
 
-        project_env["PT_Project"] = project_name
-        project_env["PT_Tools"] = pt_art_tools_path
-        project_env["PT_Coala"] = project_coala
-
-        if runas_dev == True: # add folders to environment
-            project_env["PT_Maya"] = "DEV"
-            User = getpass.getuser()
-            env_folder = f"C:/Users/{User}/Documents/maya"
-        else:
-            project_env["PT_Maya"] = "Stable"
-            # icons folder
-            project_env["XBMLANGPATH"] = project_icons
-            env_folder = os.path.abspath(maya_env)
-
-        
-        maya_exe_path = f"C:/Program Files/Autodesk/MAYA{project_maya_version}/bin/maya.exe"
-        maya_arguments = [maya_exe_path]
-        project_env["MAYA_APP_DIR"] = f"{os.path.abspath(env_folder)}/"  # Maya projects set from launcher
-        #print(f'Running as {project_env["PT_Maya"]}: {project_name}')
-        return (maya_arguments, project_env)
-
-
-    def maya_launcher(self, maya_arguments, project_env):
-        subprocess.Popen(maya_arguments, env=project_env)# Doesnt wait after running maya
 
 
 class pt_luncher_ui(QtWidgets.QWidget):
@@ -180,8 +148,3 @@ if __name__=="__main__":
     launcher_win = pt_luncher_ui()
     launcher_win.show()
     sys.exit(app.exec())
-    #pt_proj=launcher_utils.pt_projects()
-    #for each_proj in pt_proj.get_project_list():
-    #    print(pt_proj.get_project_info(each_proj))
-    #launcher_win=pt_luncher_ui()
-    #launcher_win.show()

@@ -46,6 +46,9 @@ class pt_proj_info:
 
         self._pt_project_list = self._pt_projects.get_project_list()
         self.project_data = None
+        self.initialize()
+
+    def initialize(self):
         if self.project in self._pt_project_list:
             self.project_data = self._pt_projects.get_project_info()
 
