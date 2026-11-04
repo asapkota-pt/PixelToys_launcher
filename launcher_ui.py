@@ -16,6 +16,7 @@ from PySide6 import QtGui
 from PySide6 import QtWidgets
 
 class launcher():
+    """Class to  recieve environment from launcher_env and run defined DCC software """
     def __init__(self, project_name, software_name, runas_dev=False):
         super().__init__()
         self.pt_launcher_env = "./_env"
@@ -42,6 +43,7 @@ class launcher():
 
 
 class pt_luncher_ui(QtWidgets.QWidget):
+    """ Class for Launcher UI """
     icon_loc = "./PtLauncher_icon.png"
     button_size=QtCore.QSize(85, 120)
     launcher_title = "PT Launcher"

@@ -7,6 +7,7 @@ import getpass
 import launcher_utils
 
 class pt_dcc_env():
+    """ Class to define and return environment for each DCC platform"""
     def __init__(self, project_name, env, runas_dev):
         self.project_name = project_name
         self.env = env
