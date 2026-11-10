@@ -2,7 +2,7 @@ import os
 import subprocess
 import json
 
-class get_project_data_object:
+class GetProjectDataObject:
     """ Class to Read projects_info json file and return necessary information"""
     def __init__(self):
         self._project_info_json = "./PT_projects_info.json"
@@ -27,10 +27,10 @@ class get_project_data_object:
 
 
 
-class pt_projects():
+class PtProjects():
     """Class for recieving list of Projects to populate Launcher UI"""
     def __init__(self):
-        self.project_data = get_project_data_object()
+        self.project_data = GetProjectDataObject()
 
     def get_project_list(self):
         return(self.project_data.project_list)
@@ -40,12 +40,12 @@ class pt_projects():
 
 
 
-class pt_proj_info:
+class PtProjInfo:
     """Class to get each Project detailed information"""
     def __init__(self, project_name):
         super().__init__()
         self.project = project_name
-        self._pt_projects = pt_projects()
+        self._pt_projects = PtProjects()
 
         self._pt_project_list = self._pt_projects.get_project_list()
         self.project_data = None
@@ -85,7 +85,7 @@ class pt_proj_info:
 
 
 if __name__ == "__main__":
-    proj_list = pt_projects().get_project_list()
+    proj_list = PtProjects().get_project_list()
     print(proj_list)
     proj_data = pt_proj_info(proj_list[0])
     print(proj_data.get_project_location())

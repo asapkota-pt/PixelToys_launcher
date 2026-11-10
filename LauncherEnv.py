@@ -4,9 +4,9 @@ import json
 import sys
 import getpass
 
-import launcher_utils
+import LauncherUtils
 
-class pt_dcc_env():
+class PtDccEnv():
     """ Class to define and return environment for each DCC platform"""
     def __init__(self, project_name, env, runas_dev):
         self.project_name = project_name
@@ -20,7 +20,7 @@ class pt_dcc_env():
 
     @property
     def get_maya_env(self):
-        pt_projects = launcher_utils.pt_proj_info(self.project_name)
+        pt_projects = LauncherUtils.PtProjInfo(self.project_name)
         project_python = pt_projects.get_project_python()
         project_icons = pt_projects.get_project_icon()
         project_coala = pt_projects.get_project_coala()

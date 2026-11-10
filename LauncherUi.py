@@ -8,14 +8,14 @@ pyside6_location = os.path.abspath("./_env/_python/Lib/site-packages")
 if not pyside6_location in sys.path:
     sys.path.append(pyside6_location)
 
-import launcher_utils
-import launcher_env
+import LauncherUtils
+import LauncherEnv
 
 from PySide6 import QtCore
 from PySide6 import QtGui
 from PySide6 import QtWidgets
 
-class launcher():
+class Launcher():
     """Class to  recieve environment from launcher_env and run defined DCC software """
     def __init__(self, project_name, software_name, runas_dev=False):
         super().__init__()
@@ -26,7 +26,7 @@ class launcher():
         self.setup_launch()
 
     def setup_launch(self):
-        pt_environment = launcher_env.pt_dcc_env(self.project_name, env=f"{self.pt_launcher_env}/_mayaEnv", runas_dev=self.runas_dev)
+        pt_environment = LauncherEnv.PtDccEnv(self.project_name, env=f"{self.pt_launcher_env}/_mayaEnv", runas_dev=self.runas_dev)
         arguments, project_env = None, None
         if self.dcc_name == "maya":
             arguments, project_env = pt_environment.maya_env
@@ -42,23 +42,23 @@ class launcher():
 
 
 
-class pt_luncher_ui(QtWidgets.QWidget):
+class PtLuncherUi(QtWidgets.QWidget):
     """ Class for Launcher UI """
     icon_loc = "./PtLauncher_icon.png"
     button_size=QtCore.QSize(85, 120)
     launcher_title = "PT Launcher"
     def __init__(self):
-        super(pt_luncher_ui, self).__init__(parent=None)
+        super(PtLuncherUi, self).__init__(parent=None)
         self.set_ui_default()
         self.create_widget()
         self.create_layout()
         self.create_connection()
-        self.pt_projs = launcher_utils.pt_projects()
+        self.pt_projs = LauncherUtils.PtProjects()
         self.create_project_buttons()
 
     def set_ui_default(self):
         self.setStyleSheet("background-color: #1e1e1e;")
-        self.setWindowTitle(pt_luncher_ui.launcher_title)
+        self.setWindowTitle(PtLuncherUi.launcher_title)
         self.setWindowIcon(QtGui.QIcon(self.icon_loc))
         self.setMinimumWidth(414)
         self.setMaximumWidth(414)
@@ -100,7 +100,7 @@ class pt_luncher_ui(QtWidgets.QWidget):
         self.line.setStyleSheet("background-color: #787878;")
 
     def create_button(self, project):
-        self.pt_proj_info = launcher_utils.pt_proj_info(project)
+        self.pt_proj_info = LauncherUtils.PtProjInfo(project)
         icon_location = f"{self.pt_proj_info.get_project_icon()}/proj_ico.png"
         self.button = QtWidgets.QToolButton()
         self.button.setText(project.upper())
@@ -108,8 +108,8 @@ class pt_luncher_ui(QtWidgets.QWidget):
         if os.path.isfile(icon_location):
             icon = QtGui.QIcon(icon_location)
             self.button.setIcon(icon)
-        self.button.setIconSize(pt_luncher_ui.button_size)
-        self.button.setFixedSize(pt_luncher_ui.button_size)
+        self.button.setIconSize(PtLuncherUi.button_size)
+        self.button.setFixedSize(PtLuncherUi.button_size)
         self.button.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self.button.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.button.clicked.connect(lambda: self.project_launcher(project))
@@ -136,7 +136,7 @@ class pt_luncher_ui(QtWidgets.QWidget):
 
     def project_launcher(self, project, runas_dev=False):
         software_name = "maya"
-        launcher(project_name=project, software_name=software_name, runas_dev=runas_dev)
+        Launcher(project_name=project, software_name=software_name, runas_dev=runas_dev)
         #self.close()
         pass
 
@@ -147,6 +147,6 @@ class pt_luncher_ui(QtWidgets.QWidget):
 
 if __name__=="__main__":
     app=QtWidgets.QApplication(sys.argv)
-    launcher_win = pt_luncher_ui()
+    launcher_win = PtLuncherUi()
     launcher_win.show()
     sys.exit(app.exec())
